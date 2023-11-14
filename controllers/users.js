@@ -1,12 +1,8 @@
 const { HttpError, ctrlWrapper, sequelize } = require('../helpers')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-// const config = require('../config')[process.env.NODE_ENV || 'development'];
-// const Sequelize = require('sequelize');
 require("dotenv").config();
 
-
-// const sequelize = new Sequelize(config.postgres.options);
 const { usersModel } = require('../models/Users');
 const Users = usersModel(sequelize);
 const { SECRET_KEY } = process.env
@@ -28,7 +24,7 @@ const login = async (req, res) => {
     if (!user) {
         throw HttpError(401, "Email or password invalid")
     }
-    
+
     const passwordCompare = await bcrypt.compare(password, user.password);
     if (!passwordCompare) {
         throw HttpError(401, "Email or password invalid");
@@ -38,13 +34,12 @@ const login = async (req, res) => {
         id: user.id,
     }
 
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '30s' })
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '24h' })
     res.cookie("token", token, { httpOnly: true })
-    res.json({token})
+    res.json({ token })
 }
 
 const getById = async (req, res) => {
-    console.log('hi')
     const { id } = req.params;
     const user = await Users.findByPk(id)
     if (!user) {
@@ -54,7 +49,15 @@ const getById = async (req, res) => {
 }
 
 const update = async (req, res) => {
-
+    const { id } = req.params
+    const user = await Users.findByPk(id)
+    if (!user) {
+        throw HttpError(404)
+    }
+    await user.update({ ...req.body })
+    const updatedUser = await Users.findByPk(id)
+    req.app.get('socketService').emit('updateNotification', `user with id:${id} was successfuly updated`);
+    res.json(updatedUser)
 }
 
 module.exports = {

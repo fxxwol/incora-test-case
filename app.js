@@ -1,8 +1,8 @@
 const express = require('express')
 const cors = require('cors')
 const {sequelize} = require('./helpers')
-// const Sequelize = require('sequelize')
 const httpServer = require('http')
+const SocketService = require('./socketService');
 require("dotenv").config();
 const config = require('./config')[process.env.NODE_ENV || 'development'];
 
@@ -11,7 +11,6 @@ const app = express()
 const usersRouter = require('./routes/users');
 const cookieParser = require('cookie-parser');
 
-// const sequelize = new Sequelize(config.postgres.options);
 
 function connectToPostgres() {
     sequelize.authenticate().then(() => {
@@ -42,6 +41,9 @@ app.use((err, req, res, next) => {
 })
 
 const http = httpServer.Server(app);
+const socketService = new SocketService(http);
+app.set('socketService', socketService);
+
 const PORT = process.env.PORT || 5000;
 http.listen(PORT, () => {
     console.log(`Server started on ${PORT}`);

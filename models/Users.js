@@ -3,6 +3,12 @@ const { patterns: { phonePattern, alphaPattern, passwordPattern} } = require('..
 const bcrypt = require('bcrypt');
 const Joi = require('joi');
 
+const commonMessages = {
+    alphaPatternMsg: 'Must only contain letters',
+    phonePatternMsg: 'Invalid phone number format',
+    passwordPatternMsg: 'Should have at least one letter, one number, and be 8 characters long.',
+};
+
 const usersModel = (sequelize) => {
     const Users = sequelize.define('Users', {
         id: {
@@ -16,7 +22,7 @@ const usersModel = (sequelize) => {
             validate: {
                 isAlpha: {
                     args: true,
-                    msg: 'First name must only contain letters.',
+                    msg: commonMessages.alphaPatternMsg,
                 },
             },
         },
@@ -25,7 +31,7 @@ const usersModel = (sequelize) => {
             validate: {
                 isAlpha: {
                     args: true,
-                    msg: 'Last name must only contain letters.',
+                    msg: commonMessages.alphaPatternMsg,
                 },
             },
         },
@@ -36,7 +42,7 @@ const usersModel = (sequelize) => {
             validate: {
                 isEmail: {
                     args: true,
-                    msg: 'Invalid email address.',
+                    msg: commonMessages.phonePatternMsg,
                 },
             },
         },
@@ -60,18 +66,42 @@ const usersModel = (sequelize) => {
 
 const createSchema = Joi.object({
     first_name: Joi.string().pattern(alphaPattern).required().messages({
-        "string.pattern.base": "First name must only contain letters"
+        "string.pattern.base": commonMessages.alphaPatternMsg
     }),
     last_name: Joi.string().pattern(alphaPattern).messages({
-        "string.pattern.base": "Last name must only contain letters"
+        "string.pattern.base": commonMessages.alphaPatternMsg
     }),
     email: Joi.string().email().required(),
     phone: Joi.string().pattern(phonePattern).messages({
-        "string.pattern.base": "Invalid phone number format"
+        "string.pattern.base": commonMessages.phonePatternMsg
     }),
     password: Joi.string().pattern(passwordPattern).messages({
-        "string.pattern.base": "Password should have at least one letter, one number and be 8 characters long."
+        "string.pattern.base": commonMessages.passwordPatternMsg
     }).required()
 })
 
-module.exports = { usersModel, createSchema }
+const loginSchema = Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().pattern(passwordPattern).messages({
+        "string.pattern.base": commonMessages.passwordPatternMsg
+    }).required()
+})
+
+const updateSchema = Joi.object({
+    first_name: Joi.string().pattern(alphaPattern).messages({
+        "string.pattern.base": commonMessages.alphaPatternMsg
+    }),
+    last_name: Joi.string().pattern(alphaPattern).messages({
+        "string.pattern.base": commonMessages.alphaPatternMsg
+    }),
+    email: Joi.string().email(),
+    phone: Joi.string().pattern(phonePattern).messages({
+        "string.pattern.base": commonMessages.phonePatternMsg
+    }),
+    password: Joi.string().pattern(passwordPattern).messages({
+        "string.pattern.base": commonMessages.passwordPatternMsg
+    })
+})
+
+const schemas = {createSchema, loginSchema, updateSchema}
+module.exports = { usersModel, schemas }
