@@ -1,4 +1,5 @@
 const HttpError = require('./HttpError')
 const ctrlWrapper = require('./ctrlWrapper')
 const patterns = require('./patterns')
-module.exports = { HttpError, ctrlWrapper, patterns }
+const sequelize = require('./defineSequelize')
+module.exports = { HttpError, ctrlWrapper, patterns, sequelize }
