@@ -9,13 +9,13 @@ const Users = usersModel(sequelize);
 
 const authAccess = async (req, res, next) => {
     const { authorization = "" } = req.headers;
-    let [bearer, token] = authorization.split(" ");
-    if (bearer !== "Bearer") {
-        next(HttpError(401));
+    let token = null;
+    if (authorization && authorization.startsWith('Bearer ')) {
+        token = authorization.split(' ')[1];
+    } else {
+        token = req.cookies && req.cookies.token
     }
-    if (!token && req.cookies && req.cookies.token) {
-        token = req.cookies.token;
-    }
+
     if (!token) {
         next(HttpError(401));
     }

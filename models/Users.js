@@ -19,32 +19,14 @@ const usersModel = (sequelize) => {
         first_name: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: {
-                isAlpha: {
-                    args: true,
-                    msg: commonMessages.alphaPatternMsg,
-                },
-            },
         },
         last_name: {
             type: DataTypes.STRING,
-            validate: {
-                isAlpha: {
-                    args: true,
-                    msg: commonMessages.alphaPatternMsg,
-                },
-            },
         },
         email: {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true,
-            validate: {
-                isEmail: {
-                    args: true,
-                    msg: commonMessages.phonePatternMsg,
-                },
-            },
         },
         phone: {
             type: DataTypes.STRING,

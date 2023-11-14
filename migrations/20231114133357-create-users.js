@@ -12,32 +12,14 @@ module.exports = {
         first_name: {
           type: Sequelize.STRING,
           allowNull: false,
-          validate: {
-            isAlpha: {
-              args: true,
-              msg: 'First name must only contain letters.',
-            },
-          },
         },
         last_name: {
           type: Sequelize.STRING,
-          validate: {
-            isAlpha: {
-              args: true,
-              msg: 'Last name must only contain letters.',
-            },
-          },
         },
         email: {
           type: Sequelize.STRING,
           allowNull: false,
           unique: true,
-          validate: {
-            isEmail: {
-              args: true,
-              msg: 'Invalid email address.',
-            },
-          },
         },
         phone: {
           type: Sequelize.STRING,
