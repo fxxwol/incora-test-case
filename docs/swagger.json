@@ -1,0 +1,245 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Test-case",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Roksolana Protsiv",
+      "email": "protsivroksolana2004@gmail.com"
+    }
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [
+    {
+      "url": "http://localhost:5000/api/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Users operations"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create a new user",
+        "requestBody": {
+          "description": "New user body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/userSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "409": {
+            "description": "User with such email already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Login",
+        "requestBody": {
+          "description": "Login's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/loginSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Invalid data"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get user by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the user",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 13
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Users"],
+        "summary": "Update user by id",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the user",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 13
+          }
+        ],
+        "requestBody": {
+          "description": "New data for user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "userSchema": {
+        "type": "object",
+        "required": ["first_name", "email", "password"],
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "description": "User's first name",
+            "example": "Ethan"
+          },
+          "last_name": {
+            "type": "string",
+            "description": "User's last name",
+            "example": "Anderson"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "example": "ethan@mail.com"
+          },
+          "phone": {
+            "type": "string",
+            "description": "User's phone number",
+            "example": "098 756 43 56"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "user1234"
+          }
+        }
+      },
+      "loginSchema": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "example": "ethan@mail.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "user1234"
+          }
+        }
+      },
+      "updateSchema": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "description": "User's first name",
+            "example": "Mike"
+          },
+          "last_name": {
+            "type": "string",
+            "description": "User's last name",
+            "example": "Anderson"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "example": "Mike@mail.com"
+          },
+          "phone": {
+            "type": "string",
+            "description": "User's phone number",
+            "example": "098 904 43 56"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "mike1234"
+          }
+        }
+      }
+    }
+  }
+}

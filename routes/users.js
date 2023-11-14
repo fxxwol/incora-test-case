@@ -5,9 +5,9 @@ const { schemas: {createSchema, loginSchema, updateSchema}} = require('../models
 const authAccess = require('../middlewares/authAccess')
 const router = express.Router()
 
-router.post('/', validateBody(createSchema), create)
+router.post('/users', validateBody(createSchema), create)
 router.post('/login', validateBody(loginSchema), login)
-router.get('/:id', getById)
-router.put('/:id', authAccess, validateBody(updateSchema), update)
+router.get('/users/:id', getById)
+router.put('/users/:id', authAccess, validateBody(updateSchema), update)
 
 module.exports = router

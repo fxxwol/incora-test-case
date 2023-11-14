@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const cookieParser = require('cookie-parser');
 const {sequelize} = require('./helpers')
 const httpServer = require('http')
 const SocketService = require('./socketService');
@@ -9,8 +10,11 @@ const config = require('./config')[process.env.NODE_ENV || 'development'];
 const app = express()
 
 const usersRouter = require('./routes/users');
-const cookieParser = require('cookie-parser');
 
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./docs/swagger.json");
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 function connectToPostgres() {
     sequelize.authenticate().then(() => {
@@ -29,7 +33,7 @@ config.postgres.client = postgresClient;
 app.use(cors())
 app.use(express.json())
 app.use(cookieParser())
-app.use("/api/users", usersRouter)
+app.use("/api/", usersRouter)
 
 app.use((req, res) => {
     res.status(404).json({ message: 'Not found' })
