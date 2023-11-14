@@ -7,7 +7,7 @@ const config = require('./config')[process.env.NODE_ENV || 'development'];
 
 const app = express()
 
-// const usersRouter = require('./routes/users')
+const usersRouter = require('./routes/users')
 
 const sequelize = new Sequelize(config.postgres.options);
 
@@ -27,7 +27,7 @@ config.postgres.client = postgresClient;
 
 app.use(cors())
 app.use(express.json())
-// app.use("/api/users", usersRouter)
+app.use("/api/users", usersRouter)
 
 app.use((req, res) => {
     res.status(404).json({ message: 'Not found' })
