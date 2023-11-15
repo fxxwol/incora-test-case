@@ -1,4 +1,4 @@
-#Test-case
+# Test-case
 
 .env configs
 PORT=5000
@@ -11,7 +11,7 @@ SECRET_KEY=your secret key
 
 Also you can access [swagger documentation](http://localhost:5000/api-docs/) on localhost after running the server
 
-##Commands
+## Commands
 
 - `npm install` &mdash; install dependecies
 - `npm start`  &mdash; start server in production mode
