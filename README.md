@@ -3,9 +3,9 @@
 .env configs
 PORT=5000
 DB_HOST=localhost
-DB_USERNAME=users
+DB_NAME=users
+DB_USERNAME=postgres
 DB_PASSWORD=your password
-DB_USER=postgres
 DB_PORT=5432
 SECRET_KEY=your secret key
 
